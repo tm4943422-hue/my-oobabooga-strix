@@ -49,3 +49,54 @@ docker compose up --build -d
 
 Лицензия
 Этот проект распространяется под лицензией AGPL-3.0, наследуя лицензию оригинальных репозиториев Oobabooga.
+
+# Oobabooga Docker & Conda: AMD Strix Halo (gfx1151) Optimized
+
+This build is a fully isolated, ready-to-use Docker container with [Text-Generation-WebUI (Oobabooga)](https://github.com/oobabooga/text-generation-webui). 
+
+The main feature: the `llama.cpp` engine here is **hard-compiled for the AMD Strix Halo (gfx1151) architecture** using ROCm 7.2.4.
+
+## ⚠️ Important Hardware Warning
+This image is built with the `-DGPU_TARGETS=gfx1151` compiler flag. This means hardware acceleration will **only work on Strix Halo architecture APUs**. On other AMD GPUs (RDNA2, RDNA3) or NVIDIA, the package will throw a compatibility error.
+
+## Why does this repository exist?
+1. **Fixes the `libxml2` issue on newer OS:** Resolves the LLVM/lld compiler dependency conflict in AMD ROCm tools on distributions like Ubuntu 24.04+ (t64 transition).
+2. **Clean Miniconda Environment:** A full Conda environment is deployed inside the container for maximum C/C++ dependency stability.
+3. **Agent-Ready:** The API port (5000) is automatically exposed for connecting external frameworks like Roo Code or CrewAI.
+4. **Seamless Extension Installation:** The startup script automatically checks and installs `requirements.txt` for activated plugins.
+
+## 🚀 Quick Start
+
+### Requirements
+* Linux OS with `amdgpu` drivers installed.
+* Installed Docker and Docker Compose plugin.
+
+### Installation and Run
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git)
+   cd YOUR_REPOSITORY
+Build and start the container:
+
+Bash
+docker compose up --build -d
+The first build will take some time as Docker downloads ROCm and compiles llama.cpp from scratch.
+
+Place your neural networks in .gguf format into the newly created models/ folder.
+
+Open the web interface in your browser: http://127.0.0.1:7860
+
+⚙️ Critical Browser Settings (UMA Memory)
+Since we are using an APU with Unified Memory Architecture (UMA), when loading a model for the first time, you must go to the Model tab and check:
+
+✅ no_mmap — loads model weights directly into allocated RAM (saves the system from freezing completely).
+
+✅ flash_attn — saves memory and speeds up token generation.
+
+Default Ports
+7860 — Web UI (browser)
+
+5000 — OpenAI-compatible API (for agents)
+
+License
+This project is distributed under the AGPL-3.0 license, inheriting the license of the original Oobabooga repositories.
