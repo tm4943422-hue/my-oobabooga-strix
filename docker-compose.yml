@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  oobabooga-strix:
+    build: .
+    container_name: oobabooga-strix-halo
+    # Проброс APU внутрь контейнера
+    devices:
+      - "/dev/kfd:/dev/kfd"
+      - "/dev/dri:/dev/dri"
+    group_add:
+      - video
+      - render
+    ports:
+      - "7860:7860" # WebUI
+      - "5000:5000" # API для Roo Code / CrewAI
+    volumes:
+      # Модели хранятся на хосте, чтобы не пропадали при пересоздании контейнера
+      - ./models:/app/text-generation-webui/models
+      - ./extensions:/app/text-generation-webui/extensions
+    restart: unless-stopped
