@@ -23,11 +23,11 @@
 ### Установка и запуск
 1. Склонируйте репозиторий:
    ```bash
-   git clone [https://github.com/ВАШ_НИК/ВАШ_РЕПОЗИТОРИЙ.git](https://github.com/ВАШ_НИК/ВАШ_РЕПОЗИТОРИЙ.git)
-   cd ВАШ_РЕПОЗИТОРИЙ
+   git clone https://github.com/tm4943422-hue/my-oobabooga-strix
+   cd textgen-webui
 Запустите сборку и старт контейнера:
 
-Bash
+```bash
 docker compose up --build -d
 Первая сборка займет время, так как Docker скачает ROCm и скомпилирует llama.cpp с нуля.
 
@@ -74,8 +74,8 @@ This image is built with the `-DGPU_TARGETS=gfx1151` compiler flag. This means h
 ### Installation and Run
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git)
-   cd YOUR_REPOSITORY
+   git clone https://github.com/tm4943422-hue/my-oobabooga-strix
+   cd textgen-webui
 Build and start the container:
 
 Bash
