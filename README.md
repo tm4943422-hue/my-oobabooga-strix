@@ -30,6 +30,7 @@
 
    ```bash
    docker compose up --build -d
+
 Первая сборка займет время, так как Docker скачает ROCm и скомпилирует llama.cpp с нуля.
 
 Положите ваши нейросети в формате .gguf в появившуюся папку models/.
@@ -77,10 +78,12 @@ This image is built with the `-DGPU_TARGETS=gfx1151` compiler flag. This means h
    ```bash
    git clone https://github.com/tm4943422-hue/my-oobabooga-strix
    cd textgen-webui
+
 Build and start the container:
 
    ```bash
    docker compose up --build -d
+
 The first build will take some time as Docker downloads ROCm and compiles llama.cpp from scratch.
 
 Place your neural networks in .gguf format into the newly created models/ folder.
