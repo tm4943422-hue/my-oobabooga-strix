@@ -25,6 +25,7 @@
    ```bash
    git clone https://github.com/tm4943422-hue/my-oobabooga-strix
    cd textgen-webui
+
 Запустите сборку и старт контейнера:
 
    ```bash
