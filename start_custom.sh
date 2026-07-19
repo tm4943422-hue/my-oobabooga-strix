@@ -31,6 +31,12 @@ done
 # Отдельно устанавливаем whisper
 pip install openai-whisper --upgrade --quiet
 
+# Запускаем прокси авто-переключения моделей (для Roo Code / CrewAI на порту 5005).
+# Он перехватывает /v1/chat/completions и /v1/completions, сверяет поле "model"
+# с реально загруженной моделью и при расхождении дергает /v1/internal/model/load,
+# чего сам oobabooga не делает.
+python model_switch_proxy.py &
+
 # Запускаем сервер
 python server.py \
     --listen \

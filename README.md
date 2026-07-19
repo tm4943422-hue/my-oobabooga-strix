@@ -13,6 +13,7 @@
 2. **Чистая среда Miniconda:** Внутри контейнера развернута полноценная среда Conda для максимальной стабильности C/C++ зависимостей.
 3. **Готовность к агентам:** Автоматически открыт API-порт (5000) для подключения внешних фреймворков вроде Roo Code или CrewAI.
 4. **Бесшовная установка расширений:** Скрипт запуска сам проверяет и устанавливает `requirements.txt` для активированных плагинов.
+5. **Авто-переключение моделей для Roo Code:** Родной OpenAI API oobabooga игнорирует поле `model` в запросе и всегда отвечает той моделью, что уже загружена. Roo Code при выборе модели в интерфейсе не вызывает `/v1/internal/model/load`, поэтому переключение "не работает". Контейнер поднимает на порту **5005** прокси (`model_switch_proxy.py`), который сверяет `model` из запроса с реально загруженной моделью и сам вызывает `/v1/internal/model/load` при расхождении.
 
 ## 🚀 Быстрый старт
 
@@ -48,7 +49,9 @@
 Порты по умолчанию
 7860 — Web UI (браузер)
 
-5000 — OpenAI-совместимый API (для агентов)
+5000 — OpenAI-совместимый API (родной, без авто-переключения моделей)
+
+5005 — Прокси с авто-переключением моделей — **используйте этот порт в Roo Code / CrewAI**, чтобы выбор модели в клиенте реально переключал модель на сервере
 
 Лицензия
 Этот проект распространяется под лицензией AGPL-3.0, наследуя лицензию оригинальных репозиториев Oobabooga.
@@ -67,6 +70,7 @@ This image is built with the `-DGPU_TARGETS=gfx1151` compiler flag. This means h
 2. **Clean Miniconda Environment:** A full Conda environment is deployed inside the container for maximum C/C++ dependency stability.
 3. **Agent-Ready:** The API port (5000) is automatically exposed for connecting external frameworks like Roo Code or CrewAI.
 4. **Seamless Extension Installation:** The startup script automatically checks and installs `requirements.txt` for activated plugins.
+5. **Model auto-switch for Roo Code:** oobabooga's native OpenAI API ignores the `model` field in requests and always answers with whatever model is currently loaded. Roo Code never calls `/v1/internal/model/load` when you pick a model in its UI, so switching "does nothing". The container runs a proxy (`model_switch_proxy.py`) on port **5005** that compares the request's `model` field against the currently loaded model and calls `/v1/internal/model/load` itself when they differ.
 
 ## 🚀 Quick Start
 
@@ -101,7 +105,9 @@ Since we are using an APU with Unified Memory Architecture (UMA), when loading a
 Default Ports
 7860 — Web UI (browser)
 
-5000 — OpenAI-compatible API (for agents)
+5000 — OpenAI-compatible API (native, no model auto-switch)
+
+5005 — Model auto-switch proxy — **point Roo Code / CrewAI at this port** so picking a model in the client actually switches it on the server
 
 License
 This project is distributed under the AGPL-3.0 license, inheriting the license of the original Oobabooga repositories.

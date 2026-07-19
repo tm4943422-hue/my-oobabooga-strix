@@ -37,6 +37,9 @@ WORKDIR /app/text-generation-webui
 RUN pip install --no-cache-dir torch torchvision torchaudio markupsafe pillow --index-url https://download.pytorch.org/whl/rocm7.2
 RUN pip install --no-cache-dir -r requirements.txt
 
+# 5b. Зависимости для прокси авто-переключения моделей (Roo Code / CrewAI)
+RUN pip install --no-cache-dir flask requests
+
 # 6. Сборка llama-cpp-binaries жестко под Strix Halo (gfx1151)
 RUN git clone https://github.com/oobabooga/llama-cpp-binaries && \
     cd llama-cpp-binaries && \
@@ -52,12 +55,13 @@ RUN git clone https://github.com/oobabooga/llama-cpp-binaries && \
     FORCE_CMAKE=1 pip install . --no-cache-dir --force-reinstall --no-build-isolation && \
     cd .. && rm -rf llama-cpp-binaries
 
-# 7. Подготовка кастомного скрипта запуска
+# 7. Подготовка кастомного скрипта запуска и прокси авто-переключения моделей
 COPY start_custom.sh /app/text-generation-webui/start_custom.sh
+COPY model_switch_proxy.py /app/text-generation-webui/model_switch_proxy.py
 RUN chmod +x /app/text-generation-webui/start_custom.sh
 
-# Открываем порты для UI и API агентов
-EXPOSE 7860 5000
+# Открываем порты для UI, API агентов и прокси авто-переключения моделей
+EXPOSE 7860 5000 5005
 
 # Запускаем скрипт без оболочки SHELL, чтобы он сам активировал Conda
 ENTRYPOINT ["/bin/bash", "/app/text-generation-webui/start_custom.sh"]
